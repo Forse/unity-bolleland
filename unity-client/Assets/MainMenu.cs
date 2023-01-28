@@ -70,7 +70,10 @@ public class MainMenu : MonoBehaviour
 
     void OnDisable()
     {
-        PlayerPrefs.SetString("gameData.gameId", _gameData.GameId.ToString());
-        PlayerPrefs.SetString("gameData.playerId", _gameData.PlayerId.ToString());
+        if (_gameData != null)
+        {
+            PlayerPrefs.SetString("gameData.gameId", _gameData.GameId.ToString());
+            PlayerPrefs.SetString("gameData.playerId", _gameData.PlayerId.ToString());
+        }
     }
 }
