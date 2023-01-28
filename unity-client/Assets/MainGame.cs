@@ -1,14 +1,16 @@
 using Assets.GameServer;
+using GameServer;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 public class MainGame : MonoBehaviour
 {
     public GameData _gameData;
-
+    
     private float nextActionTime = 0.0f;
     public float period = 5.0f;
 
@@ -29,7 +31,17 @@ public class MainGame : MonoBehaviour
             {
                 var gameStatus = new GameServerApiClient().GetGameStatus(_gameData.GameId, _gameData.PlayerId);
                 Debug.Log("GameStatus: " + gameStatus.GameState.ToString() + ", NumberOfRoundsPlayed:" + gameStatus.NumberOfRoundsPlayed);
+                if (gameStatus.GameState == GameServer.GameState.WaitingForPlayer)
+                {
+                    GameState.Data.Status = "Waiting for player";
+                    GameState.Data.RoundNumber = gameStatus.NumberOfRoundsPlayed + 1;
+                }
             }
+        }
+
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("Menu");
         }
     }
 
