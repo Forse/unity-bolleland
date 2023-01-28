@@ -1,13 +1,15 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class Commands : MonoBehaviour, IPointerClickHandler
 {
-    public Text text;
     public int maxCommands;
     private List<CommandItem> _commands = new();
+    public GameObject text;
+    public GameObject commandList;
+    private List<GameObject> commandListItems = new();
     
     // Start is called before the first frame update
     void Start()
@@ -42,7 +44,14 @@ public class Commands : MonoBehaviour, IPointerClickHandler
                     Move = commandButtonState.move
                 });
 
-                var textObject = Instantiate(text, transform.parent);
+
+                var item = Instantiate(text, commandList.transform);
+                
+                var t = item.GetComponentInChildren<TextMeshPro>();
+                // var trans = item.GetComponentInChildren<RectTransform>();
+                t.text = commandButtonState.name;
+                
+                commandListItems.Add(item);
             }
         }
     }
