@@ -1,24 +1,36 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Hud.GameData
 {
     public class GameDataHud : MonoBehaviour
     {
+        private float nextActionTime = 0.0f;
+        public float period = 1.0f;
+
         void Update() 
         {
-            Debug.Log("Updating status in GameData Hud");
+            if (Time.time > nextActionTime)
+            {
+                nextActionTime += period;
+                var status = GameState.Data.Status;
+                var roundNumber = GameState.Data.RoundNumber;
+                
+                var textComponents = GetComponentsInChildren<Text>();
+                var text_Round = textComponents.First(x => x.name == "Text_Round");
+                var text_Status = textComponents.First(x => x.name == "Text_Status");
+
+                text_Status.text = status.ToString();
+                text_Round.text = "Round: " + roundNumber.ToString();
+                Debug.Log("Updating status in GameData Hud");
+            }
 
         }
 
         void Start() 
         {
-            var status = GameState.Data.Status;
-            var roundNumber = GameState.Data.RoundNumber;
-            var text_Round = (Text)GetComponent("Text_Round");
-            var text_Status = (Text)GetComponent("Text_Status");
-            text_Status.text = status.ToString();
-            Debug.Log("Setting status in GameData Hud");
+            Debug.Log("Starting GameData Hud");
         }
     }
 }
